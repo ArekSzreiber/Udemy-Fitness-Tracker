@@ -51,9 +51,11 @@
     >
       Agree to terms and conditions
     </mat-checkbox>
-    <button [disabled]="f.invalid"
-            type="submit"
-            mat-raised-button color="primary"
+    <button
+      color="primary"
+      [disabled]="f.invalid"
+      mat-raised-button
+      type="submit"
     >Submit
     </button>
   </form>
