@@ -1,1 +1,15 @@
-<p>training works!</p>
+<mat-tab-group
+  animationDuration="0ms"
+  mat-align-tabs="center"
+>
+  <mat-tab label="New Exercise">
+    <ng-template matTabContent>
+      <app-new-training></app-new-training>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Past Exercises">
+    <ng-template matTabContent>
+      <app-past-trainings></app-past-trainings>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
