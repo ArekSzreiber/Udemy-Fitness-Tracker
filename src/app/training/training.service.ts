@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class TrainingService {
-  availableExercises: Exercise[] = [
+  private availableExercises: Exercise[] = [
     {id: 'burpees', name: 'Burpees', duration: 60, calories: 8},
     {id: 'crunches', name: 'Crunches', duration: 30, calories: 8},
     {id: 'leg-raises', name: 'Leg Raises', duration: 45, calories: 5},
@@ -15,4 +15,8 @@ export class TrainingService {
     {id: 'touch-toes', name: 'Touch Toes', duration: 180, calories: 15},
     // todo try to replace hardcoded exercises with these exercises
   ];
+
+  getAvailableExercises(): Exercise[] {
+    return this.availableExercises.slice();
+  }
 }
