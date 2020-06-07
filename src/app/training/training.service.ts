@@ -1,5 +1,9 @@
 import { Exercise } from './exercise.model';
+import { Injectable } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root',
+})
 export class TrainingService {
   availableExercises: Exercise[] = [
     {id: 'burpees', name: 'Burpees', duration: 60, calories: 8},
