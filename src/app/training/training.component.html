@@ -4,7 +4,7 @@
 >
   <mat-tab label="New Exercise">
     <ng-template matTabContent>
-      <app-new-training (trainingStart)="ongoingTraining = true;"></app-new-training>
+      <app-new-training></app-new-training>
     </ng-template>
   </mat-tab>
   <mat-tab label="Past Exercises">
@@ -13,4 +13,8 @@
     </ng-template>
   </mat-tab>
 </mat-tab-group>
-<app-current-training (trainingExit)="ongoingTraining = false;" *ngIf="ongoingTraining"></app-current-training>
+<app-current-training
+  (trainingExit)="ongoingTraining = false;"
+  *ngIf="ongoingTraining"
+
+></app-current-training>
