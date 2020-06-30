@@ -13,8 +13,4 @@
     </ng-template>
   </mat-tab>
 </mat-tab-group>
-<app-current-training
-  (trainingExit)="ongoingTraining = false;"
-  *ngIf="ongoingTraining"
-
-></app-current-training>
+<app-current-training *ngIf="ongoingTraining"></app-current-training>

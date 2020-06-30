@@ -18,6 +18,29 @@ export class TrainingService {
     // todo try to replace hardcoded exercises with these exercises
   ];
   private runningExercise: Exercise;
+  private pastExercises: Exercise[] = [];
+
+  completeExercise() {
+    this.pastExercises.push({
+      ...this.runningExercise,
+      date: new Date(),
+      state: 'completed',
+    });
+    this.runningExercise = null;
+    this.exerciseChanged.next(this.runningExercise);
+  }
+
+  cancelExercise(progress: number) {
+    this.pastExercises.push({
+      ...this.runningExercise,
+      date: new Date(),
+      state: 'cancelled',
+      duration: this.runningExercise.duration * progress / 100,
+      calories: this.runningExercise.calories * progress / 100,
+    });
+    this.runningExercise = null;
+    this.exerciseChanged.next(this.runningExercise);
+  }
 
   getAvailableExercises(): Exercise[] {
     return this.availableExercises.slice();
