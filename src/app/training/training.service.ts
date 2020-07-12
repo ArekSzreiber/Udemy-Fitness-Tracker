@@ -15,7 +15,6 @@ export class TrainingService {
     {id: 'side-lunges', name: 'Side Lunges', duration: 120, calories: 18},
     {id: 'squats', name: 'Squats', duration: 60, calories: 10},
     {id: 'touch-toes', name: 'Touch Toes', duration: 180, calories: 15},
-    // todo try to replace hardcoded exercises with these exercises
   ];
   private runningExercise: Exercise;
   private pastExercises: Exercise[] = [];
@@ -55,5 +54,9 @@ export class TrainingService {
 
   getRunningExercise() {
     return {...this.runningExercise};
+  }
+
+  getPastExercises() {
+    return this.pastExercises.slice();
   }
 }
