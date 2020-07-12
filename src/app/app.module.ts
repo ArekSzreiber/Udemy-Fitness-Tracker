@@ -19,6 +19,9 @@ import { StopTrainingComponent } from './training/current-training/stop-training
 import { TrainingComponent } from './training/training.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -35,6 +38,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
     WelcomeComponent,
   ],
   imports: [
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
