@@ -67,6 +67,8 @@ export class TrainingService {
   }
 
   startExercise(selectedId: string) {
+    // this is how you can select single document
+    // this.db.doc('availableExercises/' + selectedId).update({lastSelected: new Date()});
     this.runningExercise = this.availableExercises.find(exercise => {
       return exercise.id === selectedId;
     });
