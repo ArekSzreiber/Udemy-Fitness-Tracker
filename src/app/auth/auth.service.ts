@@ -40,6 +40,7 @@ export class AuthService {
   }
 
   logout() {
+    this.auth.auth.signOut();
     this.isAuthenticated = false;
     this.authChange.next(false);
     this.router.navigate(['/login']);
