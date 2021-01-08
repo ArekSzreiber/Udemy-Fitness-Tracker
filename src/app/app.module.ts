@@ -21,6 +21,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 import { FirestoreDatePipe } from './training/firestore-date.pipe';
 
@@ -40,6 +41,7 @@ import { FirestoreDatePipe } from './training/firestore-date.pipe';
     WelcomeComponent,
   ],
   imports: [
+    AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AppRoutingModule,

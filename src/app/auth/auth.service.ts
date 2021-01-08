@@ -1,54 +1,59 @@
 import { Subject } from 'rxjs/Subject';
-
-import { User } from './user.model';
-import { AuthData } from './auth-data.model';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AuthData } from './auth-data.model';
 
 @Injectable()
 export class AuthService {
   authChange = new Subject<boolean>();
-  private user: User;
+  private isAuthenticated: boolean = false;
 
   constructor(
     private router: Router,
+    private auth: AngularFireAuth,
   ) {
   }
 
-  successfullyAuthorized() {
-    this.authChange.next(true);
-    this.router.navigate(['/training']);
-  }
-
   registerUser(authData: AuthData) {
-    this.user = {
-      email: authData.email,
-      userId: Math.round(Math.random() * 10000).toString(),
-    };
-    this.successfullyAuthorized();
+    this.auth.auth.createUserWithEmailAndPassword(
+      authData.email,
+      authData.password,
+    ).then(result => {
+      console.log(result, 'successful');
+      this.successfullyAuthorized();
+    }).catch(error => {
+      console.log(error, 'error');
+    });
   }
 
   login(authData: AuthData) {
-    this.user = {
-      email: authData.email,
-      userId: Math.round(Math.random() * 10000).toString(),
-    };
-    this.successfullyAuthorized();
+    this.auth.auth.signInWithEmailAndPassword(
+      authData.email,
+      authData.password,
+    ).then(result => {
+      console.log(result, 'successful');
+      this.successfullyAuthorized();
+    }).catch(error => {
+      console.log(error, 'error');
+    });
   }
 
   logout() {
-    this.user = null;
+    this.isAuthenticated = false;
     this.authChange.next(false);
     this.router.navigate(['/login']);
 
   }
 
-  getUser() {
-    return {...this.user};
+  isAuth() {
+    return this.isAuthenticated;
   }
 
-  isAuth() {
-    return this.user != null;
+  private successfullyAuthorized() {
+    this.isAuthenticated = true;
+    this.authChange.next(true);
+    this.router.navigate(['/training']);
   }
 
 }
