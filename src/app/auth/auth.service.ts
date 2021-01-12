@@ -23,7 +23,6 @@ export class AuthService {
       authData.password,
     ).then(result => {
       console.log(result, 'successful');
-      this.successfullyAuthorized();
     }).catch(error => {
       console.log(error, 'error');
     });
@@ -35,29 +34,32 @@ export class AuthService {
       authData.password,
     ).then(result => {
       console.log(result, 'successful');
-      this.successfullyAuthorized();
     }).catch(error => {
       console.log(error, 'error');
     });
   }
 
   logout() {
-    this.trainingService.cancelSubscriptions();
     this.auth.auth.signOut();
-    this.isAuthenticated = false;
-    this.authChange.next(false);
-    this.router.navigate(['/login']);
-
   }
 
   isAuth() {
     return this.isAuthenticated;
   }
 
-  private successfullyAuthorized() {
-    this.isAuthenticated = true;
-    this.authChange.next(true);
-    this.router.navigate(['/training']);
+  initAuthListener(){
+    this.auth.authState.subscribe(user => {
+      if(user){
+        this.isAuthenticated = true;
+        this.authChange.next(true);
+        this.router.navigate(['/training']);
+      }else{
+        this.trainingService.cancelSubscriptions();
+        this.isAuthenticated = false;
+        this.authChange.next(false);
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
 }
