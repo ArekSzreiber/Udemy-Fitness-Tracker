@@ -6,6 +6,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { UIService } from '../shared/ui.service';
+import { Error } from 'tslint/lib/error';
 
 
 @Injectable({
@@ -56,6 +57,7 @@ export class TrainingService {
         .snapshotChanges()
         .pipe(
           map(docArray => {
+            // throw(new Error())
             return docArray.map(doc => {
               return {
                 id: doc.payload.doc.id,
@@ -70,6 +72,10 @@ export class TrainingService {
           this.uiService.loadingStateChanged.next(false);
           this.availableExercises = exercises;
           this.exercisesChanged.next([...this.availableExercises]);
+        }, error => {
+          this.uiService.loadingStateChanged.next(false);
+          this.uiService.showSnackbar('Fetching exercises failed, please try again later', null, 3000);
+          this.exercisesChanged.next(null);
         })
     );
   }
