@@ -1,22 +1,21 @@
+import { NgModule } from '@angular/core';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
-import { NgModule } from '@angular/core';
+import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/auth.service';
 import { HeaderComponent } from './navigation/header/header.component';
 import { MaterialModule } from './material.module';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
-import { WelcomeComponent } from './welcome/welcome.component';
-
-import { AngularFireModule } from 'angularfire2';
-import { environment } from '../environments/environment';
 import { UIService } from './shared/ui.service';
-import { AuthModule } from './auth/auth.module';
-import { TrainingModule } from './training/training.module';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +26,7 @@ import { TrainingModule } from './training/training.module';
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
     AppRoutingModule,
     AuthModule,
     BrowserAnimationsModule,
@@ -34,7 +34,6 @@ import { TrainingModule } from './training/training.module';
     FlexLayoutModule,
     FormsModule,
     MaterialModule,
-    TrainingModule,
   ],
   providers: [AuthService, UIService],
   bootstrap: [AppComponent],
