@@ -13,7 +13,6 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
 import { WelcomeComponent } from './welcome/welcome.component';
 
 import { AngularFireModule } from 'angularfire2';
-import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 import { UIService } from './shared/ui.service';
 import { AuthModule } from './auth/auth.module';
@@ -27,7 +26,6 @@ import { TrainingModule } from './training/training.module';
     WelcomeComponent,
   ],
   imports: [
-    AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
     AppRoutingModule,
     AuthModule,
