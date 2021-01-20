@@ -5,6 +5,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthData } from './auth-data.model';
 import { TrainingService } from '../training/training.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UIService } from '../shared/ui.service';
 
 @Injectable()
 export class AuthService {
@@ -16,28 +17,33 @@ export class AuthService {
     private auth: AngularFireAuth,
     private trainingService: TrainingService,
     private snackbar: MatSnackBar,
+    private uiService: UIService,
   ) {
   }
 
   registerUser(authData: AuthData) {
+    this.uiService.loadingStateChanged.next(true);
     this.auth.auth.createUserWithEmailAndPassword(
       authData.email,
       authData.password,
     ).then(result => {
-      console.log(result, 'successful');
+      this.uiService.loadingStateChanged.next(false);
     }).catch(error => {
+      this.uiService.loadingStateChanged.next(false);
       this.showError(error);
     });
   }
 
   login(authData: AuthData) {
+    this.uiService.loadingStateChanged.next(true);
     this.auth.auth.signInWithEmailAndPassword(
       authData.email,
       authData.password,
     ).then(result => {
-      console.log(result, 'successful');
+      this.uiService.loadingStateChanged.next(false);
     }).catch(error => {
       this.showError(error);
+      this.uiService.loadingStateChanged.next(false);
     });
   }
 

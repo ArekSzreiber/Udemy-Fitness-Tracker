@@ -24,6 +24,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 import { FirestoreDatePipe } from './training/firestore-date.pipe';
+import { UIService } from './shared/ui.service';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,7 @@ import { FirestoreDatePipe } from './training/firestore-date.pipe';
     MaterialModule,
     ReactiveFormsModule,
   ],
-  providers: [AuthService],
+  providers: [AuthService, UIService],
   bootstrap: [AppComponent],
   entryComponents: [StopTrainingComponent]
 })
