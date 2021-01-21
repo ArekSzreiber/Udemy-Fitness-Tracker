@@ -2,7 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { UIService } from '../../shared/ui.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as fromApp from '../../app.reducer';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -12,22 +15,28 @@ import { Subscription } from 'rxjs';
 export class LoginComponent implements OnInit, OnDestroy {
 
   loginForm: FormGroup;
-  isLoading: boolean = false;
+  // isLoading: boolean = false;
+  isLoading$: Observable<boolean>;
   isLoadingSubscription: Subscription;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private uiService: UIService,
+    private store: Store<{ ui: fromApp.State }>,
   ) {
   }
 
   ngOnInit(): void {
-    this.isLoadingSubscription = this.uiService.loadingStateChanged
-      .subscribe(isLoadingState => {
-          this.isLoading = isLoadingState;
-        }
-      );
+    // this.store.subscribe(data => {
+    //   console.log(data);
+    // })
+    this.isLoading$ = this.store.pipe(map(state => state.ui.isLoading));
+    // this.isLoadingSubscription = this.uiService.loadingStateChanged
+    //   .subscribe(isLoadingState => {
+    //       this.isLoading = isLoadingState;
+    //     }
+    //   );
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.min(6)]],
@@ -35,7 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.isLoadingSubscription?.unsubscribe();
+    // this.isLoadingSubscription?.unsubscribe();
   }
 
   onSubmit() {

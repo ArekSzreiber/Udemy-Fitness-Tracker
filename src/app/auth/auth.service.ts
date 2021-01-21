@@ -5,6 +5,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthData } from './auth-data.model';
 import { TrainingService } from '../training/training.service';
 import { UIService } from '../shared/ui.service';
+import { Store } from '@ngrx/store';
+import * as fromApp from '../app.reducer';
 
 @Injectable()
 export class AuthService {
@@ -16,32 +18,39 @@ export class AuthService {
     private auth: AngularFireAuth,
     private trainingService: TrainingService,
     private uiService: UIService,
+    private store: Store<{ui: fromApp.State}>,
   ) {
   }
 
   registerUser(authData: AuthData) {
-    this.uiService.loadingStateChanged.next(true);
+    // this.uiService.loadingStateChanged.next(true);
+    this.store.dispatch({type: 'START_LOADING'});
     this.auth.auth.createUserWithEmailAndPassword(
       authData.email,
       authData.password,
     ).then(result => {
-      this.uiService.loadingStateChanged.next(false);
+      // this.uiService.loadingStateChanged.next(false);
+      this.store.dispatch({type: 'STOP_LOADING'});
     }).catch(error => {
-      this.uiService.loadingStateChanged.next(false);
+      // this.uiService.loadingStateChanged.next(false);
+      this.store.dispatch({type: 'STOP_LOADING'});
       this.uiService.showSnackbar(error.message, null, 3000);
     });
   }
 
   login(authData: AuthData) {
-    this.uiService.loadingStateChanged.next(true);
+    // this.uiService.loadingStateChanged.next(true);
+    this.store.dispatch({type: 'START_LOADING'});
     this.auth.auth.signInWithEmailAndPassword(
       authData.email,
       authData.password,
     ).then(result => {
-      this.uiService.loadingStateChanged.next(false);
+      // this.uiService.loadingStateChanged.next(false);
+      this.store.dispatch({type: 'STOP_LOADING'});
     }).catch(error => {
       this.uiService.showSnackbar(error.message, null, 3000);
-      this.uiService.loadingStateChanged.next(false);
+      // this.uiService.loadingStateChanged.next(false);
+      this.store.dispatch({type: 'STOP_LOADING'});
     });
   }
 
