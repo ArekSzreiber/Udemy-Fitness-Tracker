@@ -52,14 +52,14 @@
       Agree to terms and conditions
     </mat-checkbox>
     <button
-      *ngIf="!isLoading"
+      *ngIf="!(isLoading$ | ngrxPush)"
       color="primary"
       [disabled]="f.invalid"
       mat-raised-button
       type="submit"
     >Submit
     </button>
-    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <mat-spinner *ngIf="isLoading$ | ngrxPush"></mat-spinner>
   </form>
 </section>
 
