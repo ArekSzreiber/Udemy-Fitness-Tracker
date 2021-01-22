@@ -4,8 +4,7 @@ import { AuthService } from '../auth.service';
 import { UIService } from '../../shared/ui.service';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import * as fromApp from '../../app.reducer';
-import { map } from 'rxjs/operators';
+import * as fromRoot from '../../app.reducer';
 
 @Component({
   selector: 'app-login',
@@ -23,20 +22,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private authService: AuthService,
     private uiService: UIService,
-    private store: Store<{ ui: fromApp.State }>,
+    private store: Store<fromRoot.State>,
   ) {
   }
 
   ngOnInit(): void {
-    // this.store.subscribe(data => {
-    //   console.log(data);
-    // })
-    this.isLoading$ = this.store.pipe(map(state => state.ui.isLoading));
-    // this.isLoadingSubscription = this.uiService.loadingStateChanged
-    //   .subscribe(isLoadingState => {
-    //       this.isLoading = isLoadingState;
-    //     }
-    //   );
+    this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.min(6)]],

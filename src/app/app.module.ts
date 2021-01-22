@@ -17,7 +17,7 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
 import { UIService } from './shared/ui.service';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { StoreModule } from '@ngrx/store';
-import { appReducer } from './app.reducer';
+import { reducers } from './app.reducer';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,7 @@ import { appReducer } from './app.reducer';
     FlexLayoutModule,
     FormsModule,
     MaterialModule,
-    StoreModule.forRoot({ui: appReducer}),
+    StoreModule.forRoot(reducers),
   ],
   providers: [AuthService, UIService],
   bootstrap: [AppComponent],
