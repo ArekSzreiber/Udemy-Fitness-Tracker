@@ -18,6 +18,7 @@ import { UIService } from './shared/ui.service';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from './app.reducer';
+import { ReactiveComponentModule } from '@ngrx/component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { reducers } from './app.reducer';
     FormsModule,
     MaterialModule,
     StoreModule.forRoot(reducers),
+    ReactiveComponentModule,
   ],
   providers: [AuthService, UIService],
   bootstrap: [AppComponent],

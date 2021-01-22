@@ -14,10 +14,10 @@
        fxHide.xs
   >
     <ul fxLayout fxLayoutGap="15px" class="navigation-items">
-      <li *ngIf="!isAuth"><a routerLink="/signup">Signup</a></li>
-      <li *ngIf="!isAuth"><a routerLink="/login">Login</a></li>
-      <li *ngIf="isAuth"><a routerLink="/training">Training</a></li>
-      <li *ngIf="isAuth"><a (click)="onLogout()">Logout</a></li>
+      <li *ngIf="!(isAuth$ | ngrxPush)"><a routerLink="/signup">Signup</a></li>
+      <li *ngIf="!(isAuth$ | ngrxPush)"><a routerLink="/login">Login</a></li>
+      <li *ngIf="isAuth$ | ngrxPush"><a routerLink="/training">Training</a></li>
+      <li *ngIf="isAuth$ | ngrxPush"><a (click)="onLogout()">Logout</a></li>
     </ul>
 
   </div>
