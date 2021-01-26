@@ -8,6 +8,8 @@ import { FirestoreDatePipe } from './firestore-date.pipe';
 import { SharedModule } from '../shared/shared.module';
 import { TrainingRoutingModule } from './training-routing.module';
 import { ReactiveComponentModule } from '@ngrx/component';
+import { StoreModule } from '@ngrx/store';
+import { trainingReducer } from './training.reducer';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { ReactiveComponentModule } from '@ngrx/component';
     ReactiveComponentModule,
     SharedModule,
     TrainingRoutingModule,
+    StoreModule.forFeature('training', trainingReducer)
   ],
   entryComponents: [StopTrainingComponent]
 
