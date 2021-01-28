@@ -1,4 +1,4 @@
-<mat-tab-group *ngIf="!ongoingTraining"
+<mat-tab-group *ngIf="!(ongoingTraining$ | ngrxPush)"
                animationDuration="0ms"
                mat-align-tabs="center"
 >
@@ -13,4 +13,4 @@
     </ng-template>
   </mat-tab>
 </mat-tab-group>
-<app-current-training *ngIf="ongoingTraining"></app-current-training>
+<app-current-training *ngIf="ongoingTraining$ | ngrxPush"></app-current-training>
