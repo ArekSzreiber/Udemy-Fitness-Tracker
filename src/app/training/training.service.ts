@@ -3,10 +3,9 @@ import { Exercise } from './exercise.model';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { UIService } from '../shared/ui.service';
-import { Error } from 'tslint/lib/error';
 import * as UI from '../shared/ui.actions';
 import * as fromTraining from './training.reducer';
 import * as Training from './training.actions';
@@ -16,7 +15,6 @@ import { Store } from '@ngrx/store';
   providedIn: 'root',
 })
 export class TrainingService {
-  exerciseChanged = new Subject<Exercise>();
   exercisesChanged = new Subject<Exercise[]>();
   pastExercisesChanged = new Subject<Exercise[]>();
   private runningExercise: Exercise;
@@ -30,25 +28,29 @@ export class TrainingService {
   }
 
   completeExercise() {
-    this.addDataToDatabase({
-      ...this.runningExercise,
-      date: new Date(),
-      state: 'completed',
+    this.store.select(fromTraining.getActiveTraining)
+      .pipe(take(1)).subscribe(exercise => {
+      this.addDataToDatabase({
+        ...exercise,
+        date: new Date(),
+        state: 'completed',
+      });
+      this.store.dispatch(new Training.StopTraining());
     });
-    this.runningExercise = null;
-    this.store.dispatch(new Training.StopTraining());
   }
 
   cancelExercise(progress: number) {
-    this.addDataToDatabase({
-      ...this.runningExercise,
-      date: new Date(),
-      state: 'cancelled',
-      duration: this.runningExercise.duration * progress / 100,
-      calories: this.runningExercise.calories * progress / 100,
+    this.store.select(fromTraining.getActiveTraining)
+      .pipe(take(1)).subscribe(exercise => {
+      this.addDataToDatabase({
+        ...exercise,
+        date: new Date(),
+        state: 'cancelled',
+        duration: exercise.duration * progress / 100,
+        calories: exercise.calories * progress / 100,
+      });
+      this.store.dispatch(new Training.StopTraining());
     });
-    this.runningExercise = null;
-    this.store.dispatch(new Training.StopTraining());
   }
 
   fetchAvailableExercises(): void {
@@ -88,10 +90,6 @@ export class TrainingService {
     this.store.dispatch(new Training.StartTraining(selectedId));
   }
 
-  getRunningExercise() {
-    return {...this.runningExercise};
-  }
-
   fetchPastExercises() {
     this.firebaseSubscriptions.push(
       this.db.collection('finishedExercises')
@@ -102,11 +100,11 @@ export class TrainingService {
     );
   }
 
-  private addDataToDatabase(exercise: Exercise) {
-    this.db.collection('finishedExercises').add(exercise);
+  public cancelSubscriptions() {
+    this.firebaseSubscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  public cancelSubscriptions(){
-    this.firebaseSubscriptions.forEach(subscription => subscription.unsubscribe());
+  private addDataToDatabase(exercise: Exercise) {
+    this.db.collection('finishedExercises').add(exercise);
   }
 }
