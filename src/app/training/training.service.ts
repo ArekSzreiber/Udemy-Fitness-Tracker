@@ -8,7 +8,8 @@ import { Subscription } from 'rxjs';
 import { UIService } from '../shared/ui.service';
 import { Error } from 'tslint/lib/error';
 import * as UI from '../shared/ui.actions';
-import * as fromRoot from '../app.reducer';
+import * as fromTraining from './training.reducer';
+import * as Training from './training.actions';
 import { Store } from '@ngrx/store';
 
 @Injectable({
@@ -18,14 +19,13 @@ export class TrainingService {
   exerciseChanged = new Subject<Exercise>();
   exercisesChanged = new Subject<Exercise[]>();
   pastExercisesChanged = new Subject<Exercise[]>();
-  private availableExercises: Exercise[];
   private runningExercise: Exercise;
   private firebaseSubscriptions: Subscription[] = [];
 
   constructor(
     private db: AngularFirestore,
     private uiService: UIService,
-    private store: Store<fromRoot.State>,
+    private store: Store<fromTraining.State>,
   ) {
   }
 
@@ -36,7 +36,7 @@ export class TrainingService {
       state: 'completed',
     });
     this.runningExercise = null;
-    this.exerciseChanged.next(this.runningExercise);
+    this.store.dispatch(new Training.StopTraining());
   }
 
   cancelExercise(progress: number) {
@@ -48,7 +48,7 @@ export class TrainingService {
       calories: this.runningExercise.calories * progress / 100,
     });
     this.runningExercise = null;
-    this.exerciseChanged.next(this.runningExercise);
+    this.store.dispatch(new Training.StopTraining());
   }
 
   fetchAvailableExercises(): void {
@@ -73,8 +73,7 @@ export class TrainingService {
         )
         .subscribe((exercises: Exercise[]) => {
           this.store.dispatch(new UI.StopLoading());
-          this.availableExercises = exercises;
-          this.exercisesChanged.next([...this.availableExercises]);
+          this.store.dispatch(new Training.SetAvailableTrainings(exercises));
         }, error => {
           this.store.dispatch(new UI.StopLoading());
           this.uiService.showSnackbar('Fetching exercises failed, please try again later', null, 3000);
@@ -86,10 +85,7 @@ export class TrainingService {
   startExercise(selectedId: string) {
     // this is how you can select single document
     // this.db.doc('availableExercises/' + selectedId).update({lastSelected: new Date()});
-    this.runningExercise = this.availableExercises.find(exercise => {
-      return exercise.id === selectedId;
-    });
-    this.exerciseChanged.next({...this.runningExercise});
+    this.store.dispatch(new Training.StartTraining(selectedId));
   }
 
   getRunningExercise() {
@@ -101,7 +97,7 @@ export class TrainingService {
       this.db.collection('finishedExercises')
         .valueChanges()
         .subscribe((exercises: Exercise[]) => {
-          this.pastExercisesChanged.next(exercises);
+          this.store.dispatch(new Training.SetFinishedTrainings(exercises));
         })
     );
   }
